@@ -13,3 +13,15 @@ export interface PaginationProps {
   totalPages: number;
   PageChange: (page: number) => void;
 }
+
+export interface CharacterDetailProps {
+  params: { id: string };
+}
+
+export interface BackButtonProps {
+  fallbackHref: string;
+}
+
+export interface CharacterCardProps {
+  initialPage?: number;
+}
