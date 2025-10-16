@@ -6,9 +6,11 @@ import { useEffect, useState } from "react";
 import Pagination from "./pagination";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import LogoutButton from "./logout";
+import useAuthStore from "@/store/useAuthStore";
 
 export default function CharacterCard({ initialPage = 1 }: CharacterCardProps) {
-
+    const isLogged = useAuthStore((state) => state.isLogged);
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -19,6 +21,14 @@ export default function CharacterCard({ initialPage = 1 }: CharacterCardProps) {
     const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
+        if (!isLogged) {
+            router.replace("/login");
+        }
+    }, [isLogged, router]);
+
+
+    useEffect(() => {
+        if (!isLogged) return;
         getCharacters(`character?page=${page}`).then((data) => {
             setCharacters(data.results);
             setTotalPages(data.info.pages);
@@ -26,9 +36,14 @@ export default function CharacterCard({ initialPage = 1 }: CharacterCardProps) {
         router.push(`/character?page=${page}`);
     }, [page]);
 
+    if (!isLogged) return null;
 
     return (
         <div className="p-6">
+            <header>
+                <h1 className="text-3xl font-bold mb-6 text-center text-white">Personajes de Rick y Morty</h1>
+                <LogoutButton />
+            </header>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 {characters.map((character) => (
                     <Link

@@ -25,3 +25,10 @@ export interface BackButtonProps {
 export interface CharacterCardProps {
   initialPage?: number;
 }
+
+export interface AuthState {
+  isLogged: boolean;
+  user: { name: string; email: string } | null;
+  login: (userData: { name: string; email: string }) => void;
+  logout: () => void;
+}
